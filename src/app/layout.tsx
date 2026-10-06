@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
+import { AuthProvider } from "../components/session-provider";
 
 export const metadata: Metadata = {
   title: "Tiangong University (Unofficial Concept)",
@@ -16,9 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen flex flex-col antialiased">
-        <Header />
+        <AuthProvider>
+                  <Header />
         <main className="flex-1">{children}</main>
         <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
