@@ -25,7 +25,18 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/admin");
+  // fetch the session to know where to send them
+  const sessionRes = await fetch("/api/auth/session");
+  const session = await sessionRes.json();
+
+  const roleRoutes: Record<string, string> = {
+    ADMIN: "/admin",
+    EDITOR: "/editor",
+    TEACHER: "/teacher",
+    STUDENT: "/portal",
+  };
+
+  router.push(roleRoutes[session.user.role] ?? "/");
   }
 
   return (
