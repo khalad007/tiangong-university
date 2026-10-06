@@ -45,9 +45,43 @@ model News {
 }
 
 model Department {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   name        String
-  slug        String   @unique
+  slug        String    @unique
   description String
+  programs    Program[]
+  createdAt   DateTime  @default(now())
+}
+
+model Program {
+  id           String     @id @default(cuid())
+  name         String
+  slug         String     @unique
+  degreeLevel  String     // "Bachelor", "Master", "PhD"
+  description  String
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String
+  createdAt    DateTime   @default(now())
+}
+
+model AdmissionInfo {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String
+  deadline    DateTime?
+  published   Boolean  @default(false)
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Event {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  location  String
+  startsAt  DateTime
+  endsAt    DateTime?
+  summary   String
+  createdAt DateTime @default(now())
 }
