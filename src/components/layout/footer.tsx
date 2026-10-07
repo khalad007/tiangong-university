@@ -1,10 +1,5 @@
+import Link from "next/link";
+import { GraduationCap, ArrowUpRight } from "lucide-react";
 export function Footer() {
-  return (
-    <footer className="border-t mt-12">
-      <div className="mx-auto max-w-6xl px-4 py-6 text-sm text-gray-500">
-        <p>Unofficial concept project. Not affiliated with Tiangong University.</p>
-        <p>© {new Date().getFullYear()} Tiangong University Concept Site.</p>
-      </div>
-    </footer>
-  );
+return <footer className="bg-brand-dark text-white"><div className="home-container grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr]"><div><Link href="/" className="flex items-center gap-3"><GraduationCap size={34}/><span className="font-serif text-xl font-semibold">Tiangong University</span></Link><p className="mt-5 max-w-xs text-sm leading-6 text-white/55">Inspiring curious minds.<br/>Creating a world of possibilities.</p><p className="mt-5 text-xs text-white/55">Tianjin, China</p></div>{[{ title: "Discover", links: [["About Tiangong", "/about"], ["Academics", "/academics"], ["Research", "/research"]] }, { title: "Your journey", links: [["Admissions", "/admissions"], ["International", "/international"], ["Campus Life", "/campus-life"]] }, { title: "Stay connected", links: [["News & Events", "/news"], ["Contact us", "/contact"], ["Student Portal", "/login"]] }].map(group => <div key={group.title}><h2 className="text-sm font-semibold">{group.title}</h2><ul className="mt-5 space-y-3">{group.links.map(([label, href]) => <li key={href}><Link href={href} className="inline-flex items-center gap-2 text-xs text-white/55 hover:text-white">{label}<ArrowUpRight size={12}/></Link></li>)}</ul></div>)}</div><div className="home-container flex flex-wrap justify-between gap-3 border-t border-white/10 py-5 text-[10px] text-white/45"><p>© {new Date().getFullYear()} Tiangong University Concept Site.</p><p>Unofficial concept. Not affiliated with Tiangong University. Illustrative content and imagery.</p></div></footer>;
 }
