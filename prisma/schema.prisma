@@ -58,9 +58,9 @@ model Program {
   id           String     @id @default(cuid())
   name         String
   slug         String     @unique
-  degreeLevel  String     // "Bachelor", "Master", "PhD"
+  degreeLevel  String
   description  String
-  department   Department @relation(fields: [departmentId], references: [id])
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
   departmentId String
   createdAt    DateTime   @default(now())
 }

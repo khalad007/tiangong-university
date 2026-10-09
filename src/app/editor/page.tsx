@@ -10,6 +10,11 @@ export default function EditorDashboard() {
             Manage News
           </Link>
         </li>
+        <li>
+          <Link href="/editor/academics" className="underline">
+            Manage Departments & Programs
+          </Link>
+        </li>
       </ul>
     </div>
   );
