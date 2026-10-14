@@ -33,9 +33,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   session: { strategy: "jwt" },
   callbacks: {
-    jwt({ token, user }) {
+    async jwt({ token, user }) {
       if (user) {
         token.role = user.role;
+      } else if (token.email) {
+        const fresh = await db.user.findUnique({
+          where: { email: token.email },
+          select: { role: true },
+        });
+        token.role = fresh?.role ?? ""; // deleted user = no access
       }
       return token;
     },
