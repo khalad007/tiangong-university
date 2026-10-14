@@ -1,0 +1,48 @@
+Make the homepage of the Tiangong University website dynamic. The homepage was designed earlier with static placeholder content. The editor and admin dashboards now manage real data (News, Events, Departments and Programs), but the homepage still shows the hardcoded placeholders, so new events and news do not appear there. Fix that without changing the design.
+
+STACK: Next.js 15 App Router, TypeScript, Tailwind, Prisma 6 with PostgreSQL (client in src/lib/db.ts, exported as db).
+
+TASK
+
+1. src/app/page.tsx
+- Keep it a server component and add: export const dynamic = "force-dynamic";
+- Fetch with Promise.all:
+  - latest news: db.news.findMany({ where: { published: true }, orderBy: { createdAt: "desc" }, take: 3 })
+  - upcoming events: db.event.findMany({ where: { startsAt: { gte: new Date() } }, orderBy: { startsAt: "asc" }, take: 3 })
+  - featured programs: db.program.findMany({ include: { department: { select: { name: true, slug: true } } }, orderBy: { createdAt: "desc" }, take: 4 })
+- Pass the results to the existing components as props: NewsPreview, EventsPreview, ProgramsHighlight.
+
+2. Existing homepage components in src/components/home/
+- Keep the current design, layout and animations exactly as they are.
+- Change NewsPreview, EventsPreview and ProgramsHighlight so they render the props they receive instead of hardcoded arrays. They should already accept props; adjust the prop types if needed.
+- Do not pass Date objects into client components. Format dates on the server in page.tsx and pass strings (for example "15 Nov 2026", and "09:00 AM" for the time) to avoid hydration mismatches.
+- News card: title, summary, formatted date, link to /news/[slug].
+- Event card: title, location, formatted date and time, summary, link to /events.
+- Program card: name, degreeLevel as a badge, description, department name, link to /academics/[department slug].
+- Add an empty state to each section ("No upcoming events right now", "No news yet", "No programs yet") that matches the section's style. The section heading must still render.
+- Keep the "View all" links: /news, /events, /academics.
+- StatsBar, Hero, AboutIntro, CampusLifeGallery, InternationalBanner and CallToAction stay static.
+
+3. New public Events pages
+- Create src/app/(public)/events/page.tsx: export const dynamic = "force-dynamic". Show PageHero (src/components/shared/page-hero.tsx), then two groups, "Upcoming" (startsAt >= now, ascending) and "Past" (startsAt < now, descending, limit 12). Use event cards that match the News list cards: date, title, location, summary. Add an empty state for each group.
+- Add an "Events" link to the nav in src/components/layout/header.tsx (after News) and to the footer quick links. Do not change any auth or session logic in the header.
+
+DATA SHAPES (do not change the schema)
+- News: id, title, slug, summary, content, published, createdAt
+- Event: id, title, slug, location, startsAt, endsAt (nullable), summary, createdAt
+- Program: id, name, slug, degreeLevel ("Bachelor" | "Master" | "PhD"), description, departmentId, department { name, slug }
+
+RULES
+- Do NOT modify src/app/actions/, src/app/editor/, src/app/admin/, src/app/api/, src/lib/ or prisma/.
+- In Next.js 15, params and searchParams are Promises and must be awaited.
+- Respect prefers-reduced-motion, keep the pages responsive, and use semantic HTML.
+- Do not change the Prisma schema or run migrations.
+- When done, run npm run build and fix any errors. The database container (tiangong-db) must be running for the build.
+
+Show me the file plan first, then build.
+
+HOW TO TEST AFTER BUILDING
+- Create an event with a future date in /editor/events and confirm it appears in the home page Upcoming Events section and on /events.
+- Create a past event and confirm it appears only under Past on /events.
+- Publish a news article and confirm it appears in the home page News section.
+- Delete all events and confirm the empty state shows without errors.

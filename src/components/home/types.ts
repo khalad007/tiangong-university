@@ -4,3 +4,6 @@ export type SectionContent = { eyebrow: string; title: string; description?: str
 export type Program = { id: string; title: string; description: string; category: string; href: string; icon: "engineering" | "science" | "design" | "business" };
 export type NewsItem = { id: string; title: string; summary: string; date: string; category: string; image: Photo; href: string };
 export type EventItem = { id: string; title: string; startsAt: string; location: string; category: string; href: string };
+export type ProgramPreviewItem = Program & { department: string };
+export type NewsPreviewItem = NewsItem & { formattedDate: string };
+export type EventPreviewItem = EventItem & { formattedDate: string; month: string; day: string; time: string; summary: string };

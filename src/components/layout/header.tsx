@@ -14,6 +14,7 @@ const links = [
   { href: "/campus-life", label: "Campus Life" },
   { href: "/international", label: "International" },
   { href: "/news", label: "News" },
+  { href: "/events", label: "Events" },
   { href: "/contact", label: "Contact" },
 ];
 const roleRoutes: Record<string, string> = {
